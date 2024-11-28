@@ -26,10 +26,13 @@ export class Authservice {
         }
     }
 
+    // Login method to create email session
     async login({ email, password }) {
         try {
-            return await this.account.createEmailSession(email, password);
+            const session = await this.account.createEmailSession(email, password);
+            return session; // Ensure this returns the session
         } catch (error) {
+            console.error("Login error:", error);
             throw error;
         }
     }
@@ -37,13 +40,20 @@ export class Authservice {
     // Check if user is logged in
     async getCurrentUser() {
         try {
-            return await this.account.get();
+            const user = await this.account.get();
+            return user; // Return user if logged in
         } catch (error) {
-            throw error;
+            // Handle unauthorized error and propagate the error
+            if (error.code === 401) {
+                console.error("User not authenticated: ", error);
+                throw new Error("User is not authenticated. Please log in.");
+            } else {
+                throw error;
+            }
         }
     }
 
-    // Log out
+    // Log out method to delete user sessions
     async logout() {
         try {
             return await this.account.deleteSessions();
