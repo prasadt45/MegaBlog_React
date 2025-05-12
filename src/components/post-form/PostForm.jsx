@@ -17,12 +17,10 @@ export default function PostForm({ post }) {
     });
 
     const navigate = useNavigate();
-    const userData = useSelector((state) => state.auth.userData);  // Ensure userData is fetched from Redux store
+    const userData = useSelector((state) => state.auth.userData); 
 
-    // Handle form submission
     const submit = async (data) => {
         try {
-            // Check if userData exists
             if (!userData || !userData.$id) {
                 console.error("User data is missing.");
                 toast.error("User not logged in.");
@@ -31,15 +29,14 @@ export default function PostForm({ post }) {
 
             const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
 
-            // If post already has a featured image, delete it
             if (file && post?.featuredImage) {
                 appwriteService.deleteFile(post.featuredImage);
             }
 
             const postData = {
                 ...data,
-                featuredImage: file ? file.$id : post?.featuredImage, // Use existing featuredImage if no new file
-                userid: userData.$id,  // Ensure userId is passed here
+                featuredImage: file ? file.$id : post?.featuredImage,
+                userid: userData.$id, 
             };
 
             let dbPost;
