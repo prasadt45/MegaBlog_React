@@ -1,0 +1,51 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+.cache/
+
+# Local environment files
+*.local
+.env*
+!.env.example
+
+# Editor directories and files
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS metadata
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Project-specific ignored files/folders
+backend/public/
+Frontend/package.json
+Frontend/package-lock.json
+Frontend/package/
+Frontend/packagelock.json
