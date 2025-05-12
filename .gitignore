@@ -24,8 +24,13 @@ build/
 
 # Local environment files
 *.local
-.env*
-!.env.example
+
+# Ignore sensitive and dependency files
+.env
+.env.*
+package.json
+package-lock.json
+
 
 # Editor directories and files
 .vscode/
