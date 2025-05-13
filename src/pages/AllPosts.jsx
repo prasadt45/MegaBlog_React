@@ -7,12 +7,20 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 function AllPosts() {
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState({});
+  const [likeCounts, setLikeCounts] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     appwriteService.getPosts([]).then((posts) => {
       if (posts) {
         setPosts(posts.documents);
+
+        // Initialize like counts (fake/mock values for now)
+        const counts = {};
+        posts.documents.forEach((post) => {
+          counts[post.$id] = Math.floor(Math.random() * 100); // simulate initial likes
+        });
+        setLikeCounts(counts);
       }
     });
   }, []);
@@ -21,6 +29,11 @@ function AllPosts() {
     setLikedPosts((prev) => ({
       ...prev,
       [postId]: !prev[postId],
+    }));
+
+    setLikeCounts((prev) => ({
+      ...prev,
+      [postId]: likedPosts[postId] ? prev[postId] - 1 : prev[postId] + 1,
     }));
   };
 
@@ -52,15 +65,22 @@ function AllPosts() {
                   <p className="text-sm text-gray-700 line-clamp-3">{post.excerpt}</p>
                 </div>
 
-                {/* Like Button */}
+                {/* Like Button with Count and Animation */}
                 <div
-                  className="absolute bottom-4 right-4 text-red-500 text-xl z-10"
+                  className={`absolute bottom-4 right-4 text-red-500 text-xl z-10 transition-transform ${
+                    likedPosts[post.$id] ? 'scale-125' : 'scale-100'
+                  }`}
                   onClick={(e) => {
-                    e.stopPropagation(); // prevent click from triggering navigation
+                    e.stopPropagation(); // prevent navigating to post
                     toggleLike(post.$id);
                   }}
                 >
-                  {likedPosts[post.$id] ? <FaHeart /> : <FaRegHeart />}
+                  {likedPosts[post.$id] ? (
+                    <FaHeart className="animate-ping-once" />
+                  ) : (
+                    <FaRegHeart />
+                  )}
+                  <div className="text-sm text-gray-600 text-center">{likeCounts[post.$id] || 0}</div>
                 </div>
               </div>
             </div>

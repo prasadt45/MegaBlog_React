@@ -45,7 +45,7 @@ function Home() {
 
   if (!isLoggedIn) {
     return (
-      <div className="w-full py-8 mt-4 text-center bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+      <div className="w-full py-8 mt-4 text-center bg-gradient-to-r  text-white">
         <Container>
           <h1
             className="text-2xl font-bold cursor-pointer hover:text-blue-100"
