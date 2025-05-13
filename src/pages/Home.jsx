@@ -49,10 +49,28 @@ function Home() {
             <h2 className="text-2xl font-semibold text-gray-600">No posts available</h2>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 py-10">
             {posts.map((post) => (
-              <div key={post.$id} className="transition transform hover:scale-105">
-                <PostCard {...post} />
+              <div
+                key={post.$id}
+                className="relative bg-white border border-gray-300 rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105 hover:shadow-2xl transform"
+              >
+                {/* Featured Image */}
+                <div className="absolute top-[-30px] left-1/2 transform -translate-x-1/2">
+                  <img
+                    src={post.featuredImage}
+                    alt={post.title}
+                    className="w-24 h-24 rounded-full border-4 border-white shadow-md"
+                  />
+                </div>
+                {/* Title Section */}
+                <div className="bg-blue-500 text-white py-2 px-4">
+                  <h3 className="text-lg font-semibold">{post.title}</h3>
+                </div>
+                {/* Post Content */}
+                <div className="p-6">
+                  <p className="text-sm text-gray-700">{post.excerpt}</p>
+                </div>
               </div>
             ))}
           </div>
