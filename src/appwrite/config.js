@@ -14,49 +14,31 @@ export class Service {
     this.bucket = new Storage(this.client);
   }
 
-  // Create a post document
   async createPost({ title, slug, content, featuredImage, status, userid }) {
-    try {
-      if (!title || !slug || !content || !userid || !featuredImage) {
-        throw new Error("Missing required fields.");
-      }
-
-      const postData = { title, slug, content, featuredImage, status, userid };
-      const response = await this.databases.createDocument(
-        conf.appwriteDatabaseId,
-        conf.appwriteCollectionId,
-        ID.unique(),
-        postData
-      );
-      return response;
-    } catch (error) {
-      console.error("createPost error:", error);
-      throw error;
+    if (!title || !slug || !content || !userid || !featuredImage) {
+      throw new Error("Missing required fields.");
     }
+    return await this.databases.createDocument(
+      conf.appwriteDatabaseId,
+      conf.appwriteCollectionId,
+      ID.unique(),
+      { title, slug, content, featuredImage, status, userid }
+    );
   }
 
-  // Update existing post by ID
   async updatePost(id, { title, content, featuredImage, status, userid }) {
-    try {
-      if (!id || !title || !content || !status || !userid) {
-        throw new Error("Missing required fields for update.");
-      }
-
-      const updateData = { title, content, featuredImage, status, userid };
-      const response = await this.databases.updateDocument(
-        conf.appwriteDatabaseId,
-        conf.appwriteCollectionId,
-        id,
-        updateData
-      );
-      return response;
-    } catch (error) {
-      console.error("updatePost error:", error);
-      throw error;
+    if (!id || !title || !content || !status || !userid) {
+      throw new Error("Missing required fields for update.");
     }
+    return await this.databases.updateDocument(
+      conf.appwriteDatabaseId,
+      conf.appwriteCollectionId,
+      id,
+      { title, content, featuredImage, status, userid }
+    );
   }
 
-  // Delete post by ID
+  // other methods remain unchanged
   async deletePost(id) {
     try {
       if (!id) throw new Error("ID is required to delete post.");
@@ -73,7 +55,6 @@ export class Service {
     }
   }
 
-  // Get a single post by ID
   async getPost(id) {
     try {
       if (!id) throw new Error("ID is required to get post.");
@@ -90,7 +71,6 @@ export class Service {
     }
   }
 
-  // Get multiple posts with optional filters (default: status=active)
   async getPosts(queries = [Query.equal("status", "active")]) {
     try {
       const posts = await this.databases.listDocuments(
@@ -105,7 +85,6 @@ export class Service {
     }
   }
 
-  // Upload a file to storage bucket, with public read permission
   async uploadFile(file) {
     try {
       if (!file) throw new Error("No file provided for upload.");
@@ -123,7 +102,6 @@ export class Service {
     }
   }
 
-  // Delete a file by fileId
   async deleteFile(fileId) {
     try {
       if (!fileId) throw new Error("fileId is required to delete file.");
@@ -136,20 +114,17 @@ export class Service {
     }
   }
 
-  // Get file preview URL by fileId - **async**
- getFilePreview(fileId) {
-  try {
-    if (!fileId) throw new Error("fileId is required to get file preview.");
-    const filePreview = this.bucket.getFilePreview(conf.appwriteBucketId, fileId);
-    return filePreview.href;
-  } catch (error) {
-    console.error("getFilePreview error:", error);
-    return null;
+  getFilePreview(fileId) {
+    try {
+      if (!fileId) throw new Error("fileId is required to get file preview.");
+      const filePreview = this.bucket.getFilePreview(conf.appwriteBucketId, fileId);
+      return filePreview.href;
+    } catch (error) {
+      console.error("getFilePreview error:", error);
+      return null;
+    }
   }
 }
-
-}
-
 
 const service = new Service();
 export default service;
