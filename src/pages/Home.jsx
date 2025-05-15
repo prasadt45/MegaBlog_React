@@ -45,7 +45,7 @@ function Home() {
 
   if (!isLoggedIn) {
     return (
-      <div className="w-full py-8 mt-4 text-center bg-gradient-to-r  text-white bg-white">
+      <div className="w-full py-12 text-center bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
         <Container>
           <h1
             className="text-2xl font-bold cursor-pointer hover:text-blue-100"
@@ -59,22 +59,20 @@ function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-gray-100 via-slate-200 to-gray-100 text-gray-800">
+    <div className="min-h-screen bg-blue-200 text-white">
       <Container>
         {posts.length === 0 ? (
           <div className="text-center py-12">
-            <h2 className="text-2xl font-semibold text-gray-600">No posts available</h2>
+            <h2 className="text-2xl font-semibold">No posts available</h2>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 py-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 py-16">
             {posts.map((post, index) => (
               <div
                 key={post.$id}
-                className="relative shadow-lg rounded-2xl overflow-hidden border border-gray-200 hover:shadow-2xl transition-transform transform hover:scale-105"
+                className="relative shadow-xl rounded-2xl overflow-hidden border border-blue-100 hover:shadow-2xl transition-transform transform hover:scale-105 bg-white text-gray-800"
               >
-                {/* Make whole card clickable */}
                 <div onClick={() => navigate(`/post/${post.$id}`)} className="cursor-pointer">
-                  {/* Top section */}
                   <div className={`flex items-center gap-4 p-4 ${bgColors[index % bgColors.length]}`}>
                     <div className="flex-shrink-0 w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md">
                       <img
@@ -87,12 +85,11 @@ function Home() {
                       <h3 className="text-xl font-bold">{post.title}</h3>
                     </div>
                   </div>
-                  <div className="bg-white p-6">
+                  <div className="p-6">
                     <p className="text-sm text-gray-700">{post.content}</p>
                   </div>
                 </div>
 
-                {/* Like Button (bottom right corner) */}
                 <button
                   onClick={() => handleLike(post.$id)}
                   className={classNames(

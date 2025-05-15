@@ -16,7 +16,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 shadow-md backdrop-blur-md sticky top-0 z-50  border-b border-blue-200">
+    <header className="bg-gradient-to-r from-blue-300 via-blue-300 to-blue-300 shadow-md backdrop-blur-md sticky top-0 z-50  border-b border-blue-200">
       <nav className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <h1
           className="text-3xl font-extrabold text-blue-800 tracking-wider cursor-pointer drop-shadow-sm"
