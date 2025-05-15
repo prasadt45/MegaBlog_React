@@ -1,19 +1,39 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+/* Ensure body and html take up full height
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: sans-serif;
+  background-color: #f0f8ff;  Soft blueish background (you can change it) 
+
+*/
+
+/* Make #root occupy full screen */
+/* #root {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 1rem;
+  box-sizing: border-box;
   text-align: center;
 }
 
+/* Optional: Logo styling 
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -35,8 +55,12 @@
 
 .card {
   padding: 2em;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
 }
 
 .read-the-docs {
   color: #888;
-}
+} */

@@ -1,76 +1,54 @@
-// Header.jsx
-import React from 'react';
-import { Container, Logo, LogoutBtn } from '../index';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/logo.jpg';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import LogoutBtn from "./LogoutBtn";
 
-function Header() {
+const Header = () => {
   const authStatus = useSelector((state) => state.auth.status);
   const navigate = useNavigate();
 
   const navItems = [
-    {
-      name: 'Home',
-      slug: '/',
-      active: true
-    },
-    {
-      name: 'Login',
-      slug: '/login',
-      active: !authStatus,
-    },
-    {
-      name: 'Signup',
-      slug: '/signup',
-      active: !authStatus,
-    },
-    {
-      name: 'All Posts',
-      slug: '/all-posts',
-      active: authStatus,
-    },
-    {
-      name: 'Add Post',
-      slug: '/add-post',
-      active: authStatus,
-    },
+    { name: "Home", slug: "/", active: true },
+    { name: "Login", slug: "/login", active: !authStatus },
+    { name: "Signup", slug: "/signup", active: !authStatus },
+    { name: "All Posts", slug: "/all-posts", active: authStatus },
+    { name: "Add Post", slug: "/add-post", active: authStatus },
   ];
 
   return (
-    <header className="py-5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 shadow-lg">
-      <Container>
-        <nav className="flex justify-between items-center">
-          <div className="mr-4">
-            <Link to="/">
-            LOGO
-            {/* //\\  <img src={logo} alt="" /> */}
-            </Link>
-          </div>
-          <ul className="flex ml-auto space-x-8">
-            {navItems.map((item) =>
-              item.active ? (
+    <header className="bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 shadow-md backdrop-blur-md sticky top-0 z-50  border-b border-blue-200">
+      <nav className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <h1
+          className="text-3xl font-extrabold text-blue-800 tracking-wider cursor-pointer drop-shadow-sm"
+          onClick={() => navigate("/")}
+        >
+          MegaBlog
+        </h1>
+
+        <ul className="flex space-x-20 items-center text-blue-800 font-medium text-lg">
+          {navItems.map(
+            (item) =>
+              item.active && (
                 <li key={item.name}>
                   <button
                     onClick={() => navigate(item.slug)}
-                    className="text-white text-lg font-semibold transition-all duration-300 ease-in-out hover:text-gray-200"
+                    className="relative group transition duration-300"
                   >
-                    {item.name}
+                    <span className="group-hover:text-blue-950 transition">{item.name}</span>
+                    <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-blue-900 transition-all duration-300 group-hover:w-full rounded-full"></span>
                   </button>
                 </li>
-              ) : null
-            )}
-            {authStatus && (
-              <li>
-                <LogoutBtn />
-              </li>
-            )}
-          </ul>
-        </nav>
-      </Container>
+              )
+          )}
+          {authStatus && (
+            <li>
+              <LogoutBtn />
+            </li>
+          )}
+        </ul>
+      </nav>
     </header>
   );
-}
+};
 
 export default Header;

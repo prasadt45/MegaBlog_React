@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import appwriteService from '../appwrite/config';
 import authService from '../appwrite/auth';
 import { Container } from '../components';
-import { FaThumbsUp } from 'react-icons/fa'; // 👍 like icon
+import { FaThumbsUp } from 'react-icons/fa'; 
 import classNames from 'classnames';
 
 function Home() {
@@ -45,7 +45,7 @@ function Home() {
 
   if (!isLoggedIn) {
     return (
-      <div className="w-full py-8 mt-4 text-center bg-gradient-to-r  text-white">
+      <div className="w-full py-8 mt-4 text-center bg-gradient-to-r  text-white bg-white">
         <Container>
           <h1
             className="text-2xl font-bold cursor-pointer hover:text-blue-100"
