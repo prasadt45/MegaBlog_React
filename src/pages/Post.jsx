@@ -4,6 +4,8 @@ import appwriteService from "../appwrite/config";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { CSSTransition } from "react-transition-group"; // for animation
 
 export default function Post() {
   const [post, setPost] = useState(null);
@@ -29,11 +31,14 @@ export default function Post() {
     try {
       const status = await appwriteService.deletePost(post.$id);
       if (status) {
-        // Optional: Delete image from Cloudinary separately if needed
+        toast.success("Post deleted successfully!");
         navigate("/");
+      } else {
+        toast.error("Failed to delete post.");
       }
     } catch (err) {
       console.error("Failed to delete post:", err);
+      toast.error("An error occurred while deleting the post.");
     }
     setLoading(false);
     setShowDeleteConfirm(false);
@@ -82,10 +87,15 @@ export default function Post() {
         </div>
       </Container>
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
+      {/* Delete Confirmation Modal with animation */}
+      <CSSTransition
+        in={showDeleteConfirm}
+        timeout={300}
+        classNames="fade"
+        unmountOnExit
+      >
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
-          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 transform transition-transform duration-300 ease-out scale-100">
             <h2 className="text-xl font-bold mb-4 text-center text-red-600">
               Confirm Delete
             </h2>
@@ -111,7 +121,29 @@ export default function Post() {
             </div>
           </div>
         </div>
-      )}
+      </CSSTransition>
+
+      {/* CSS for fade animation */}
+      <style>{`
+        .fade-enter {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        .fade-enter-active {
+          opacity: 1;
+          transform: scale(1);
+          transition: opacity 300ms, transform 300ms;
+        }
+        .fade-exit {
+          opacity: 1;
+          transform: scale(1);
+        }
+        .fade-exit-active {
+          opacity: 0;
+          transform: scale(0.9);
+          transition: opacity 300ms, transform 300ms;
+        }
+      `}</style>
     </div>
   );
 }
