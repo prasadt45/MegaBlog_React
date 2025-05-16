@@ -5,8 +5,20 @@ import service from "../../appwrite/config.js";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-// Cloudinary upload helper
+const DotWave = () => (
+  <span className="ml-2 flex gap-1 items-center">
+    {[...Array(3)].map((_, i) => (
+      <span
+        key={i}
+        className="w-1.5 h-1.5 bg-white rounded-full animate-bounce"
+        style={{ animationDelay: `${i * 0.15}s` }}
+      />
+    ))}
+  </span>
+);
+
 const uploadToCloudinary = async (file) => {
   const data = new FormData();
   data.append("file", file);
@@ -28,6 +40,27 @@ const uploadToCloudinary = async (file) => {
   }
 };
 
+const typingPhrases = [
+  "How to master React hooks ?  ...",
+  "Top 10 JavaScript tips and tricks ... ",
+  "Building a responsive UI with Tailwind CSS ...",
+  "Exploring the new features in ES2023",
+  "Understanding the React lifecycle ...",
+  "Creating a REST API with Node.js ...",
+  "Building a real-time chat app with Socket.io ...",
+  "Deploying a React app with Docker ...",
+  "Understanding the Virtual DOM ...",
+  "Building a custom React hook ...",
+  "Optimizing performance in React apps ...",
+  "Creating a responsive navbar with React ...",
+  "Building a dark mode toggle in React ...",
+  "Understanding React context API ...",
+  "Building a simple e-commerce app ...",
+  "Building a blog with Appwrite ...",
+  "Understanding async/await ...",
+  "Deploying to Netlify ...",
+];
+  
 export default function PostForm({ post }) {
   const {
     register,
@@ -46,9 +79,36 @@ export default function PostForm({ post }) {
   });
 
   const [loading, setLoading] = useState(false);
+  const [placeholder, setPlaceholder] = useState("");
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
+
+  // Typing animation logic for placeholder
+  useEffect(() => {
+    let currentPhraseIndex = 0;
+    let currentCharIndex = 0;
+    let typingTimeout;
+
+    function type() {
+      const phrase = typingPhrases[currentPhraseIndex];
+      if (currentCharIndex <= phrase.length) {
+        setPlaceholder(phrase.slice(0, currentCharIndex));
+        currentCharIndex++;
+        typingTimeout = setTimeout(type, 150);
+      } else {
+        setTimeout(() => {
+          currentCharIndex = 0;
+          currentPhraseIndex = (currentPhraseIndex + 1) % typingPhrases.length;
+          type();
+        }, 1500);
+      }
+    }
+
+    type();
+
+    return () => clearTimeout(typingTimeout);
+  }, []);
 
   const submit = async (data) => {
     try {
@@ -61,29 +121,19 @@ export default function PostForm({ post }) {
 
       const { title, slug, content } = data;
       const userid = userData.$id;
-
       let featuredImageUrl = post?.featuredImage || "";
 
-      // If new image selected, upload to Cloudinary
       if (data.image && data.image[0]) {
-        toast.info("Uploading image...");
+        toast.info(<span>Uploading Image <DotWave /></span>);
         const uploadedUrl = await uploadToCloudinary(data.image[0]);
         if (!uploadedUrl) {
-          toast.error("Failed to upload image.");
+          toast.error("Image upload failed.");
           setLoading(false);
           return;
         }
         featuredImageUrl = uploadedUrl;
-        toast.success("Image uploaded successfully!");
+        toast.success("Image uploaded!");
       }
-
-      console.log("Submitting post with data:", {
-        title,
-        slug,
-        content,
-        featuredImageUrl,
-        userid,
-      });
 
       const postData = {
         title,
@@ -114,12 +164,13 @@ export default function PostForm({ post }) {
   };
 
   const slugTransform = useCallback((value) => {
-    if (value && typeof value === "string")
+    if (value && typeof value === "string") {
       return value
         .trim()
         .toLowerCase()
         .replace(/[^a-zA-Z\d\s]+/g, "-")
         .replace(/\s/g, "-");
+    }
     return "";
   }, []);
 
@@ -135,115 +186,105 @@ export default function PostForm({ post }) {
   const selectedImage = watch("image");
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="flex flex-wrap gap-6">
-      <div className="w-2/3 px-2">
-        <Input
-          label="Title :"
-          placeholder="Title"
-          className="mb-6"
-          {...register("title", { required: true })}
-          inputClassName="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-        />
-        <Input
-          label="Slug :"
-          placeholder="Slug"
-          className="mb-6"
-          {...register("slug", { required: true })}
-          inputClassName="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-          onInput={(e) => {
-            setValue("slug", slugTransform(e.currentTarget.value), {
-              shouldValidate: true,
-            });
-          }}
-        />
-        <RTE
-          label="Content :"
-          name="content"
-          control={control}
-          defaultValue={getValues("content")}
-          className="mb-6"
-        />
-      </div>
-      <div className="w-1/3 px-2 flex flex-col items-center">
-        <Input
-          label="Featured Image :"
-          type="file"
-          className="mb-6 w-full"
-          accept="image/png, image/jpg, image/jpeg, image/gif"
-          {...register("image", { required: !post })}
-          inputClassName="border border-gray-300 rounded-md px-3 py-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-        />
-        {(selectedImage && selectedImage[0]) || (post && post.featuredImage) ? (
-          <div
-            key={post?.featuredImage || "new-image"}
-            className="mb-6 w-full rounded-lg overflow-hidden shadow-lg animate-fadeIn"
-            style={{ maxHeight: "250px" }}
+    <div className="min-h-screen  py-10 px-6 rounded-md ">
+      <form
+        onSubmit={handleSubmit(submit)}
+        className="max-w-6xl mx-auto backdrop-blur-md bg-white/60 border border-blue-200 rounded-3xl p-10 shadow-lg grid grid-cols-1 md:grid-cols-3 gap-8 transition-all"
+      >
+        {/* Left 2/3 form */}
+        <div className="md:col-span-2 space-y-6">
+          <Input
+            label="Blog-Title"
+            placeholder={placeholder || ""}
+            {...register("title", { required: true })}
+            inputClassName="bg-white/90 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 w-full"
+          />
+
+          <Input
+            label="Slug"
+            placeholder="Auto-generated from title"
+            {...register("slug", { required: true })}
+            inputClassName="bg-white/90 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 w-full"
+            onInput={(e) =>
+              setValue("slug", slugTransform(e.currentTarget.value), {
+                shouldValidate: true,
+              })
+            }
+          />
+
+          <RTE
+            label="Content"
+            name="content"
+            control={control}
+            defaultValue={getValues("content")}
+          />
+        </div>
+
+        {/* Right sidebar */}
+        <div className="flex flex-col gap-6">
+          <Input
+            label="Featured Image"
+            type="file"
+            {...register("image", { required: !post })}
+            inputClassName="bg-white/90 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 w-full cursor-pointer"
+            accept="image/*"
+          />
+
+          {(selectedImage && selectedImage[0]) || post?.featuredImage ? (
+            <div className="rounded-xl overflow-hidden shadow-md animate-fadeIn border border-gray-300">
+              <img
+                src={
+                  selectedImage && selectedImage[0]
+                    ? URL.createObjectURL(selectedImage[0])
+                    : post.featuredImage
+                }
+                alt="Preview"
+                className="w-full object-cover h-48"
+              />
+            </div>
+          ) : null}
+
+          <Select
+            label="Status"
+            options={["active", "inactive"]}
+            {...register("status", { required: true })}
+            selectClassName="bg-white/90 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 w-full"
+          />
+
+          <Button
+            type="submit"
+            bgColor={post ? "bg-green-500" : "bg-blue-600"}
+            className={`text-white font-semibold py-3 rounded-xl transition-all duration-300 ${
+              loading
+                ? "cursor-not-allowed opacity-70"
+                : "hover:scale-105 shadow-md"
+            }`}
+            disabled={loading}
           >
-            <img
-              src={
-                selectedImage && selectedImage[0]
-                  ? URL.createObjectURL(selectedImage[0])
-                  : post.featuredImage
-              }
-              alt={post?.title || "Selected"}
-              className="object-cover w-full h-full"
-              onLoad={() => URL.revokeObjectURL(selectedImage && selectedImage[0])}
-            />
-          </div>
-        ) : null}
+            {loading ? (
+              <span className="flex items-center">
+                {post ? "Updating" : "Submitting"}
+                <DotWave />
+              </span>
+            ) : post ? (
+              "Update Post"
+            ) : (
+              "Create Post"
+            )}
+          </Button>
+        </div>
+      </form>
 
-        <Select
-          options={["active", "inactive"]}
-          label="Status"
-          className="mb-6 w-full"
-          {...register("status", { required: true })}
-          selectClassName="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-        />
-
-        <Button
-          type="submit"
-          bgColor={post ? "bg-green-500" : "bg-indigo-600"}
-          className={`w-full flex justify-center items-center ${
-            loading ? "cursor-not-allowed opacity-70" : "hover:bg-opacity-90"
-          }`}
-          disabled={loading}
-        >
-          {loading && (
-            <svg
-              className="animate-spin h-5 w-5 mr-3 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-              ></path>
-            </svg>
-          )}
-          {post ? (loading ? "Updating..." : "Update") : loading ? "Submitting..." : "Submit"}
-        </Button>
-      </div>
-
-      {/* Add fade-in animation style */}
+      {/* Fade in animation */}
       <style>{`
         @keyframes fadeIn {
           from {opacity: 0;}
           to {opacity: 1;}
         }
         .animate-fadeIn {
-          animation: fadeIn 0.6s ease-in-out;
+          animation: fadeIn 0.7s ease-in-out;
         }
       `}</style>
-    </form>
+    </div>
   );
 }

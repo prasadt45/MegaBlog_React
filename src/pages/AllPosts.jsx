@@ -15,10 +15,9 @@ function AllPosts() {
       if (posts) {
         setPosts(posts.documents);
 
-        // Initialize like counts (fake/mock values for now)
         const counts = {};
         posts.documents.forEach((post) => {
-          counts[post.$id] = Math.floor(Math.random() * 100); // simulate initial likes
+          counts[post.$id] = Math.floor(Math.random() * 100);
         });
         setLikeCounts(counts);
       }
@@ -38,49 +37,65 @@ function AllPosts() {
   };
 
   return (
-    <div className="w-full py-8 bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen">
+    <div className="w-full min-h-screen py-10 bg-gradient-to-br from-indigo-50 via-white to-indigo-100">
       <Container>
-        <div className="flex flex-wrap -mx-2">
+        <h2 className="text-4xl font-extrabold text-indigo-800 mb-10 text-center tracking-wide">
+          Latest Posts
+        </h2>
+        <div className="flex flex-wrap -mx-4">
           {posts.map((post) => (
             <div
               key={post.$id}
-              className="p-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 transform transition-transform duration-300 hover:scale-105"
+              className="p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
             >
               <div
-                className="bg-white rounded-lg overflow-hidden shadow-lg cursor-pointer relative group"
+                className="bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer group transform transition duration-300 hover:shadow-2xl hover:-translate-y-2"
                 onClick={() => navigate(`/post/${post.$id}`)}
               >
-                {/* Top Section */}
-                <div className="flex items-center justify-between bg-gradient-to-r from-blue-500 to-indigo-500 p-4 text-white">
+                {/* Image Section */}
+                <div className="relative h-48 overflow-hidden rounded-t-3xl">
                   <img
                     src={post.featuredImage}
                     alt={post.title}
-                    className="w-16 h-16 rounded-full border-4 border-white shadow-md object-cover"
+                    className="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-500"
                   />
-                  <h3 className="text-lg font-bold truncate ml-4">{post.title}</h3>
+                  <div className="absolute inset-0 bg-gradient-to-t from-indigo-900 via-transparent to-transparent opacity-60"></div>
+                  <h3 className="absolute bottom-4 left-4 right-4 text-white text-xl font-semibold truncate drop-shadow-lg">
+                    {post.title}
+                  </h3>
                 </div>
 
-                {/* Bottom Content */}
-                <div className="p-4">
-                  <p className="text-sm text-gray-700 line-clamp-3">{post.excerpt}</p>
+                {/* Content Section */}
+                <div className="p-5 flex flex-col justify-between h-48">
+                  <p className="text-gray-700 text-sm line-clamp-4 mb-3">
+                    {post.excerpt || "No excerpt available."}
+                  </p>
+                  <span
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-block self-start text-indigo-600 font-semibold text-sm cursor-pointer hover:underline"
+                  >
+                    Read more →
+                  </span>
                 </div>
 
-                {/* Like Button with Count and Animation */}
+                {/* Like Button */}
                 <div
-                  className={`absolute bottom-4 right-4 text-red-500 text-xl z-10 transition-transform ${
-                    likedPosts[post.$id] ? 'scale-125' : 'scale-100'
+                  className={`absolute bottom-5 right-5 flex flex-col items-center text-red-500 text-2xl z-10 select-none transition-transform duration-300 ${
+                    likedPosts[post.$id] ? "scale-125" : "scale-100"
                   }`}
                   onClick={(e) => {
-                    e.stopPropagation(); // prevent navigating to post
+                    e.stopPropagation();
                     toggleLike(post.$id);
                   }}
                 >
                   {likedPosts[post.$id] ? (
-                    <FaHeart className="animate-ping-once" />
+                    <FaHeart className="animate-pulse text-red-600" />
                   ) : (
-                    <FaRegHeart />
+                    <FaRegHeart className="text-red-400 hover:text-red-600 transition-colors" />
                   )}
-                  <div className="text-sm text-gray-600 text-center">{likeCounts[post.$id] || 0}</div>
+                  <span className="text-sm text-gray-700 mt-1 font-medium select-text">
+                    {likeCounts[post.$id] || 0}
+                  </span>
                 </div>
               </div>
             </div>
