@@ -42,18 +42,18 @@ function AllPosts() {
         <h2 className="text-4xl font-extrabold text-indigo-800 mb-10 text-center tracking-wide">
           Latest Posts
         </h2>
-        <div className="flex flex-wrap -mx-4">
+        <div className="flex flex-wrap -mx-3">
           {posts.map((post) => (
             <div
               key={post.$id}
-              className="p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+              className="p-3 w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
             >
               <div
-                className="bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer group transform transition duration-300 hover:shadow-2xl hover:-translate-y-2"
+                className="bg-white rounded-3xl shadow-xl overflow-hidden cursor-pointer group transform transition duration-300 hover:shadow-2xl hover:-translate-y-2 relative"
                 onClick={() => navigate(`/post/${post.$id}`)}
               >
                 {/* Image Section */}
-                <div className="relative h-48 overflow-hidden rounded-t-3xl">
+                <div className="relative h-40 overflow-hidden rounded-t-3xl">
                   <img
                     src={post.featuredImage}
                     alt={post.title}
@@ -66,12 +66,16 @@ function AllPosts() {
                 </div>
 
                 {/* Content Section */}
-                <div className="p-5 flex flex-col justify-between h-48">
-                  <p className="text-gray-700 text-sm line-clamp-4 mb-3">
-                    {post.excerpt || "No excerpt available."}
+                <div className="p-4 flex flex-col justify-between h-48 overflow-y-auto">
+                  <p className="text-gray-700 text-xs line-clamp-3 mb-3">
+                    {post.content ? post.content.replace(/<[^>]+>/g, '') : 'No content available.'}
                   </p>
+
                   <span
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/post/${post.$id}`);
+                    }}
                     className="inline-block self-start text-indigo-600 font-semibold text-sm cursor-pointer hover:underline"
                   >
                     Read more →
@@ -80,9 +84,8 @@ function AllPosts() {
 
                 {/* Like Button */}
                 <div
-                  className={`absolute bottom-5 right-5 flex flex-col items-center text-red-500 text-2xl z-10 select-none transition-transform duration-300 ${
-                    likedPosts[post.$id] ? "scale-125" : "scale-100"
-                  }`}
+                  className={`absolute bottom-5 right-5 flex flex-col items-center text-red-500 text-2xl z-10 select-none transition-transform duration-300 ${likedPosts[post.$id] ? "scale-125" : "scale-100"
+                    }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleLike(post.$id);
