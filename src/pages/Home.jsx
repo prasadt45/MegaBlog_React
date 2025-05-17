@@ -10,6 +10,7 @@ function Home() {
   const [posts, setPosts] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [likedPosts, setLikedPosts] = useState({});
+  const [showCursor, setShowCursor] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +27,10 @@ function Home() {
     };
 
     checkAuthAndFetchPosts();
+
+    // Hide cursor after typing
+    const timer = setTimeout(() => setShowCursor(false), 3000);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleLike = (postId) => {
@@ -41,6 +46,11 @@ function Home() {
     'bg-gradient-to-r from-green-500 to-teal-400',
     'bg-gradient-to-r from-yellow-500 to-orange-400',
     'bg-gradient-to-r from-blue-600 to-blue-400',
+    'bg-gradient-to-r from-purple-600 to-purple-400',
+    'bg-gradient-to-r from-red-600 to-red-400',
+    'bg-gradient-to-r from-teal-600 to-teal-400',
+    'bg-gradient-to-r from-pink-600 to-pink-400',
+    'bg-gradient-to-r from-orange-600 to-orange-400',
   ];
 
   if (!isLoggedIn) {
@@ -48,17 +58,21 @@ function Home() {
       <div className="w-full py-20 text-center bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
         <Container>
           <h1
-            className="text-3xl font-extrabold cursor-pointer hover:text-blue-300 transition-colors"
+            className="text-3xl font-extrabold cursor-pointer hover:text-blue-300 transition-colors flex justify-center items-center gap-1"
             onClick={() => navigate('/login')}
           >
-            Please Login to View Posts
+            <span className="whitespace-nowrap overflow-hidden inline-block animate-typing border-r-0">
+              Please Login to View Posts
+            </span>
+            {showCursor && (
+              <span className="text-white text-3xl font-normal animate-blink">|</span>
+            )}
           </h1>
         </Container>
       </div>
     );
   }
 
-  // Show only top 9 posts
   const displayedPosts = posts.slice(0, 9);
 
   return (
@@ -75,19 +89,17 @@ function Home() {
                 <div
                   key={post.$id}
                   className="relative rounded-2xl shadow-md overflow-hidden border border-indigo-200 bg-white cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
-                  style={{ maxHeight: '320px' }} // smaller card height
+                  style={{ maxHeight: '320px' }}
                 >
                   <div
                     onClick={() => navigate(`/post/${post.$id}`)}
                     className="flex flex-col h-full"
                   >
-                    {/* Image + Title */}
                     <div
                       className={`relative h-40 ${bgColors[index % bgColors.length]} overflow-hidden rounded-t-2xl`}
                     >
                       <img
                         src={post.featuredImage}
-                        
                         className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-indigo-900 via-transparent to-transparent opacity-60"></div>
@@ -96,13 +108,10 @@ function Home() {
                       </h3>
                     </div>
 
-                    {/* Content */}
                     <div className="p-4 flex flex-col justify-between flex-grow">
-                     {/* // Inside your post rendering loop */}
                       <p className="text-gray-700 text-xs line-clamp-3 mb-3">
                         {post.content ? post.content.replace(/<[^>]+>/g, '') : 'No content available.'}
                       </p>
-
                       <span
                         className="self-start text-indigo-600 font-semibold cursor-pointer hover:underline select-none text-sm"
                         onClick={(e) => {
@@ -115,7 +124,6 @@ function Home() {
                     </div>
                   </div>
 
-                  {/* Like Button */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -135,11 +143,10 @@ function Home() {
               ))}
             </div>
 
-            {/* Read All Posts button */}
             {posts.length > 9 && (
               <div className="text-center mt-10">
                 <button
-                  onClick={() => navigate('/allposts')}
+                  onClick={() => navigate('/all-posts')}
                   className="px-6 py-3 bg-indigo-600 text-white rounded-full font-semibold shadow-lg hover:bg-indigo-700 transition-colors"
                 >
                   Read All Posts
