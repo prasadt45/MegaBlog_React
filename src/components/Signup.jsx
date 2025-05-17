@@ -7,8 +7,6 @@ import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import signupimage from '../assets/signup.jpg';
 
-
-
 function Signup() {
     const navigate = useNavigate();
     const [error, setError] = useState('');
@@ -21,7 +19,6 @@ function Signup() {
         setSuccess('');
         try {
             await authService.createAccount(data);
-
             const currentUser = await authService.getCurrentUser();
             if (currentUser) {
                 dispatch(authLogin(currentUser));
@@ -30,23 +27,30 @@ function Signup() {
             }
         } catch (err) {
             console.error('Error during signup:', err);
-            setError(err.message || 'Signup failed. Please try again.');
+            setError(err.message || 'Signup failed. Please try again.')
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 p-4">
-            <div className="flex flex-col md:flex-row bg-white shadow-lg rounded-2xl overflow-hidden w-full max-w-5xl">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 via-blue-200 to-blue-100 p-8">
+            <div className="flex flex-col md:flex-row bg-white shadow-2xl rounded-3xl overflow-hidden w-full max-w-5xl">
                 
-                {/* Left Form Section */}
-                <div className="w-full md:w-1/2 p-10">
+                <div className="hidden md:flex md:w-1/2 bg-gradient-to-tr from-blue-300 via-blue-100 to-blue-300 items-center justify-center">
+                    <img
+                        src={signupimage}
+                        alt="Signup Illustration"
+                        className="max-w-[85%] object-contain rounded-3xl shadow-lg"
+                    />
+                </div>
+
+                <div className="w-full md:w-1/3 p-10 bg-white">
                     <div className="mb-4 flex justify-center">
                         <Logo width="60px" />
                     </div>
                     <h2 className="text-2xl font-bold text-center text-gray-800">Create your account</h2>
                     <p className="text-center text-sm text-gray-500 mt-1">
                         Already have an account?{' '}
-                        <Link to="/login" className="text-indigo-600 font-semibold hover:underline">
+                        <Link to="/login" className="text-blue-600 font-semibold hover:underline">
                             Sign In
                         </Link>
                     </p>
@@ -86,19 +90,10 @@ function Signup() {
                             placeholder="Enter your password"
                             {...register('password', { required: 'Password is required' })}
                         />
-                        <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
+                        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                             Create Account
                         </Button>
                     </form>
-                </div>
-
-                {/* Right Image Section */}
-                <div className="hidden md:flex md:w-1/2 bg-gradient-to-tr from-indigo-200 via-purple-200 to-pink-200 items-center justify-center">
-                    <img
-                         src ={ signupimage}
-                        alt="Signup Illustration"
-                        className="max-w-[80%] object-cover"
-                    />
                 </div>
             </div>
         </div>

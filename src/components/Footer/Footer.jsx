@@ -4,7 +4,7 @@ import Logo from '../Logo';
 
 function Footer() {
   return (
-    <footer className="bg-gradient-to-r from-blue-300 via-blue-300 to-blue-300 text-blue-900 pt-12 pb-6   shadow-inner border-t border-blue-200">
+    <footer className="bg-gradient-to-r from-blue-300 via-blue-200 to-blue-300 text-blue-900 pt-12 pb-6   shadow-inner border-t border-blue-200">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
           {/* Logo Section */}
