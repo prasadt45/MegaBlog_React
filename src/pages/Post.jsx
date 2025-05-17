@@ -5,7 +5,7 @@ import { Button, Container } from "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { CSSTransition } from "react-transition-group"; // for animation
+import { CSSTransition } from "react-transition-group";
 
 export default function Post() {
   const [post, setPost] = useState(null);
@@ -47,65 +47,62 @@ export default function Post() {
   if (!post) return null;
 
   return (
-    <div className="py-10 bg-gray-50 min-h-screen flex flex-col items-center">
+    <div className="py-12 bg-gradient-to-b from-white to-blue-50 min-h-screen flex flex-col items-center">
       <Container>
-        <div className="max-w-4xl bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden border border-blue-100">
           {post.featuredImage && (
             <img
               src={post.featuredImage}
               alt={post.title}
-              className="w-full h-64 object-cover rounded-t-xl"
+              className="w-full h-72 object-cover rounded-t-2xl"
             />
           )}
 
-          <div className="p-8">
-            <h1 className="text-4xl font-extrabold text-indigo-700 mb-6">{post.title}</h1>
+          <div className="p-10">
+            <h1 className="text-4xl font-extrabold text-blue-700 mb-8 tracking-wide leading-tight">
+              {post.title}
+            </h1>
 
             {isAuthor && (
-              <div className="flex space-x-4 mb-8">
+              <div className="flex space-x-5 mb-10">
                 <Link to={`/edit-post/${post.$id}`}>
-                  <button
-                    type="button"
-                    className="px-5 py-2 rounded-md bg-indigo-600 text-white font-semibold shadow-md hover:bg-indigo-700 transition"
-                  >
-                    Edit Post
+                  <button className="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition-all duration-200">
+                    ✏️ Edit Post
                   </button>
                 </Link>
-
                 <button
-                  type="button"
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="px-5 py-2 rounded-md bg-red-600 text-white font-semibold shadow-md hover:bg-red-700 transition"
+                  className="px-6 py-2 rounded-lg bg-red-600 text-white font-semibold shadow hover:bg-red-700 transition-all duration-200"
                 >
-                  Delete Post
+                  🗑️ Delete Post
                 </button>
               </div>
             )}
 
-            <div className="prose prose-indigo max-w-none">{parse(post.content)}</div>
+            <div className="prose max-w-none text-gray-700 prose-blue">
+              {parse(post.content)}
+            </div>
           </div>
         </div>
       </Container>
 
-      {/* Delete Confirmation Modal with animation */}
+      {/* Delete Confirmation Modal */}
       <CSSTransition
         in={showDeleteConfirm}
         timeout={300}
         classNames="fade"
         unmountOnExit
       >
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
-          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 transform transition-transform duration-300 ease-out scale-100">
-            <h2 className="text-xl font-bold mb-4 text-center text-red-600">
-              Confirm Delete
-            </h2>
-            <p className="mb-6 text-center">
-              Are you sure you want to delete this post? This action cannot be undone.
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-8 text-center">
+            <h2 className="text-2xl font-bold text-red-600 mb-4">Confirm Deletion</h2>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete this post? This action is irreversible.
             </p>
-            <div className="flex justify-center space-x-6">
+            <div className="flex justify-center gap-6">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="px-6 py-2 rounded-md bg-gray-300 hover:bg-gray-400 transition font-semibold"
+                className="px-6 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition font-semibold"
               >
                 Cancel
               </button>
@@ -123,7 +120,7 @@ export default function Post() {
         </div>
       </CSSTransition>
 
-      {/* CSS for fade animation */}
+      {/* Fade animation CSS */}
       <style>{`
         .fade-enter {
           opacity: 0;
