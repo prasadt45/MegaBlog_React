@@ -16,14 +16,17 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-gradient-to-r from-blue-300 via-blue-300 to-blue-300 shadow-md backdrop-blur-md sticky top-0 z-50  border-b border-blue-200">
+    <header className="bg-gradient-to-r from-blue-300 via-blue-300 to-blue-300 shadow-md backdrop-blur-md sticky top-0 z-50  border-b border-blue-300">
       <nav className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <h1
-          className="text-3xl font-extrabold text-blue-800 tracking-wider cursor-pointer drop-shadow-sm"
+          className="text-3xl font-extrabold tracking-wider cursor-pointer drop-shadow-sm bg-gradient-to-r from-blue-900 via-blue-600 to-blue-800 bg-[length:300%_300%] bg-clip-text text-transparent animate-gradient-swim"
           onClick={() => navigate("/")}
         >
-          MegaBlog
+          DevBlogs
         </h1>
+
+
+
 
         <ul className="flex space-x-20 items-center text-blue-800 font-medium text-lg">
           {navItems.map(
