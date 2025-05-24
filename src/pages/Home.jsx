@@ -6,6 +6,13 @@ import { Container } from '../components';
 import { FaThumbsUp } from 'react-icons/fa';
 import classNames from 'classnames';
 
+// Helper to decode HTML entities like &nbsp;, &amp;, etc.
+function decodeHTMLEntities(text) {
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = text;
+  return textarea.value;
+}
+
 function Home() {
   const [posts, setPosts] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,7 +35,6 @@ function Home() {
 
     checkAuthAndFetchPosts();
 
-    // Hide cursor after typing
     const timer = setTimeout(() => setShowCursor(false), 3000);
     return () => clearTimeout(timer);
   }, []);
@@ -76,7 +82,7 @@ function Home() {
   const displayedPosts = posts.slice(0, 9);
 
   return (
-    <div className="min-h-screen bg-indigo-50 text-gray-900 py-12">
+    <div className="min-h-screen bg-blue-100 text-gray-900 py-12">
       <Container>
         {posts.length === 0 ? (
           <div className="text-center py-20">
@@ -110,7 +116,9 @@ function Home() {
 
                     <div className="p-4 flex flex-col justify-between flex-grow">
                       <p className="text-gray-700 text-xs line-clamp-3 mb-3">
-                        {post.content ? post.content.replace(/<[^>]+>/g, '') : 'No content available.'}
+                        {post.content
+                          ? decodeHTMLEntities(post.content.replace(/<[^>]+>/g, ''))
+                          : 'No content available.'}
                       </p>
                       <span
                         className="self-start text-indigo-600 font-semibold cursor-pointer hover:underline select-none text-sm"
