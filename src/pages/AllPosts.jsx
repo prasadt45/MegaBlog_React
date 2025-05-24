@@ -4,6 +4,13 @@ import { Container } from '../components';
 import appwriteService from '../appwrite/config';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
+// Helper to decode HTML entities
+const decodeHtml = (html) => {
+  const txt = document.createElement('textarea');
+  txt.innerHTML = html;
+  return txt.value;
+};
+
 function AllPosts() {
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState({});
@@ -104,7 +111,9 @@ function AllPosts() {
                 {/* Content Section */}
                 <div className="p-4 flex flex-col justify-between h-48 overflow-y-auto">
                   <p className="text-gray-700 text-xs line-clamp-3 mb-3">
-                    {post.content ? post.content.replace(/<[^>]+>/g, '') : 'No content available.'}
+                    {post.content
+                      ? decodeHtml(post.content.replace(/<[^>]+>/g, ''))
+                      : 'No content available.'}
                   </p>
 
                   <span
