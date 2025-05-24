@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container } from '../components';
 import appwriteService from '../appwrite/config';
@@ -10,6 +10,8 @@ function AllPosts() {
   const [likeCounts, setLikeCounts] = useState({});
   const navigate = useNavigate();
 
+  const animationRefs = useRef({});
+
   useEffect(() => {
     appwriteService.getPosts([]).then((posts) => {
       if (posts) {
@@ -17,12 +19,46 @@ function AllPosts() {
 
         const counts = {};
         posts.documents.forEach((post) => {
-          counts[post.$id] = Math.floor(Math.random() * 100);
+          counts[post.$id] = 121 + Math.floor(Math.random() * 100);
         });
-        setLikeCounts(counts);
+
+        Object.entries(counts).forEach(([postId, targetCount]) => {
+          animateCount(postId, targetCount);
+        });
       }
     });
+
+    return () => {
+      Object.values(animationRefs.current).forEach((id) => cancelAnimationFrame(id));
+    };
   }, []);
+
+  const animateCount = (postId, targetCount) => {
+    let start = 0;
+    const duration = 1000; 
+    const startTime = performance.now();
+
+    const step = (now) => {
+      const elapsed = now - startTime;
+      if (elapsed < duration) {
+        const progress = elapsed / duration;
+        const currentCount = Math.floor(progress * targetCount);
+        setLikeCounts((prev) => ({
+          ...prev,
+          [postId]: currentCount,
+        }));
+        animationRefs.current[postId] = requestAnimationFrame(step);
+      } else {
+        setLikeCounts((prev) => ({
+          ...prev,
+          [postId]: targetCount,
+        }));
+        cancelAnimationFrame(animationRefs.current[postId]);
+      }
+    };
+
+    animationRefs.current[postId] = requestAnimationFrame(step);
+  };
 
   const toggleLike = (postId) => {
     setLikedPosts((prev) => ({
