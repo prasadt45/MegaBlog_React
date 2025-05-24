@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { login as authLogin } from '../store/authSlice';
 import authService from '../appwrite/auth';
 import { Button, Input, Logo } from './index';
-import loginImage from '../assets/signup.jpg'; // Replace with login image if needed
+import loginImage from '../assets/login.png'; 
 
 function Login() {
     const navigate = useNavigate();

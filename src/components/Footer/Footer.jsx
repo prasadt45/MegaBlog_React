@@ -11,7 +11,7 @@ function Footer() {
           <div className="flex flex-col items-center sm:items-start">
             <Logo width="120px" />
             <p className="mt-4 text-sm text-blue-800">
-              &copy; 2025 All Rights Reserved by BlueCare.
+              &copy; 2025 All Rights Reserved by DevBlogs.
             </p>
           </div>
 
@@ -70,7 +70,7 @@ function Footer() {
 
       {/* Footer Bottom Section */}
       <div className="border-t border-blue-300 mt-12 pt-6 text-center text-sm text-blue-800">
-        <p>&copy; 2025 BlueCare. All rights reserved.</p>
+        <p>&copy; 2025 DevBlogs. All rights reserved.</p>
       </div>
     </footer>
   );
