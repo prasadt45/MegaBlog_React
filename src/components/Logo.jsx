@@ -1,10 +1,9 @@
-import React from 'react'
-import logo from '../assets/logo.jpg'
+// Logo.jsx
+import React from 'react';
+import logo from '../assets/logo.png';
 
-function Logo({width = '50px'}) {
-  return (
-    <img width={'100px'} src= {logo} alt="" />
-  )
+function Logo({ width = '40px' }) {
+  return <img src={logo} alt="DevBlogs Logo" style={{ width, height: 'auto' }} />;
 }
 
-export default Logo
+export default Logo;

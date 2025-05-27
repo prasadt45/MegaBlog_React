@@ -39,7 +39,7 @@ function Signup() {
                     <img
                         src={signupimage}
                         alt="Signup Illustration"
-                        className="max-w-[85%] object-contain rounded-3xl shadow-lg"
+                        className="max-w-[75%] object-contain rounded-3xl shadow-lg"
                     />
                 </div>
 
