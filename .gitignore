@@ -28,8 +28,7 @@ build/
 # Ignore sensitive and dependency files
 .env
 .env.*
-package.json
-package-lock.json
+
 
 
 # Editor directories and files
