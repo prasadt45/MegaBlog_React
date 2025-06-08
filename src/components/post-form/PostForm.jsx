@@ -35,6 +35,15 @@ const uploadToCloudinary = async (file) => {
   const data = new FormData();
   data.append("file", file);
   data.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+  console.log("Upload Preset:", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+console.log("Cloud Name:", import.meta.env.VITE_CLOUDINARY_CLOUD_NAME);
+
+
+  
+  if(!import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || !import.meta.env.VITE_CLOUDINARY_CLOUD_NAME) {
+    console.error("Cloudinary environment variables are not set.");
+    return null;
+  }
 
 
 
