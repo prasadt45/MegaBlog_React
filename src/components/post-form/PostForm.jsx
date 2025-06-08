@@ -36,6 +36,8 @@ const uploadToCloudinary = async (file) => {
   data.append("file", file);
   data.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
 
+
+
   try {
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/upload`,
@@ -44,13 +46,21 @@ const uploadToCloudinary = async (file) => {
         body: data,
       }
     );
+
     const result = await res.json();
+
+    if (!res.ok) {
+      console.error("Cloudinary response error:", result);
+      return null;
+    }
+
     return result.secure_url;
   } catch (error) {
     console.error("Cloudinary upload error:", error);
     return null;
   }
 };
+
 
 const typingPhrases = [
   "How to master React hooks ?  ...",
