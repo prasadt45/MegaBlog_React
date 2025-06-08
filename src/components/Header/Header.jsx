@@ -18,7 +18,7 @@ const Header = () => {
 
   return (
     <header className="bg-gradient-to-r from-blue-300 via-blue-300 to-blue-300 shadow-md backdrop-blur-md sticky top-0 z-50 border-b border-blue-300">
-      <nav className="max-w-7xl mx-auto px-1 py-1 flex justify-between items-center">
+      <nav className="max-w-7xl mx-auto px-2 py-1 flex justify-between items-center">
         
         {/* Logo and Title Section */}
         <div

@@ -60,7 +60,7 @@ const typingPhrases = [
   "Understanding async/await ...",
   "Deploying to Netlify ...",
 ];
-  
+
 export default function PostForm({ post }) {
   const {
     register,
@@ -80,11 +80,9 @@ export default function PostForm({ post }) {
 
   const [loading, setLoading] = useState(false);
   const [placeholder, setPlaceholder] = useState("");
-
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
 
-  // Typing animation logic for placeholder
   useEffect(() => {
     let currentPhraseIndex = 0;
     let currentCharIndex = 0;
@@ -106,7 +104,6 @@ export default function PostForm({ post }) {
     }
 
     type();
-
     return () => clearTimeout(typingTimeout);
   }, []);
 
@@ -186,12 +183,11 @@ export default function PostForm({ post }) {
   const selectedImage = watch("image");
 
   return (
-    <div className="min-h-screen  py-10 px-6 rounded-md ">
+    <div className="min-h-screen py-10 px-6 rounded-md">
       <form
         onSubmit={handleSubmit(submit)}
         className="max-w-6xl mx-auto backdrop-blur-md bg-white/60 border border-blue-200 rounded-3xl p-10 shadow-lg grid grid-cols-1 md:grid-cols-3 gap-8 transition-all"
       >
-        {/* Left 2/3 form */}
         <div className="md:col-span-2 space-y-6">
           <Input
             label="Blog-Title"
@@ -199,7 +195,6 @@ export default function PostForm({ post }) {
             {...register("title", { required: true })}
             inputClassName="bg-white/90 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 w-full"
           />
-
           <Input
             label="Slug"
             placeholder="Auto-generated from title"
@@ -211,7 +206,6 @@ export default function PostForm({ post }) {
               })
             }
           />
-
           <RTE
             label="Content"
             name="content"
@@ -220,7 +214,6 @@ export default function PostForm({ post }) {
           />
         </div>
 
-        {/* Right sidebar */}
         <div className="flex flex-col gap-6">
           <Input
             label="Featured Image"
@@ -248,7 +241,7 @@ export default function PostForm({ post }) {
             label="Status"
             options={["active", "inactive"]}
             {...register("status", { required: true })}
-            selectClassName="bg-white/90 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 w-full"
+            className="bg-white/90 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 w-full"
           />
 
           <Button
@@ -275,7 +268,6 @@ export default function PostForm({ post }) {
         </div>
       </form>
 
-      {/* Fade in animation */}
       <style>{`
         @keyframes fadeIn {
           from {opacity: 0;}
