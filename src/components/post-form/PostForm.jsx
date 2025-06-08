@@ -1,11 +1,23 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Input, RTE, Select } from ".."; // Ensure Input is corrected as above
+import { Button, RTE, Select } from "..";
 import service from "../../appwrite/config.js";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+// ✅ Local Input Component with valid className handling
+const Input = React.forwardRef(({ label, type = "text", className = "", ...props }, ref) => {
+  return (
+    <div className="flex flex-col gap-1">
+      {label && (
+        <label className="text-sm font-medium text-gray-700">{label}</label>
+      )}
+      <input type={type} ref={ref} className={className} {...props} />
+    </div>
+  );
+});
 
 const DotWave = () => (
   <span className="ml-2 flex gap-1 items-center">
@@ -193,13 +205,13 @@ export default function PostForm({ post }) {
             label="Blog-Title"
             placeholder={placeholder || ""}
             {...register("title", { required: true })}
-            inputClassName="bg-white/90 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 w-full"
+            className="bg-white/90 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 w-full"
           />
           <Input
             label="Slug"
             placeholder="Auto-generated from title"
             {...register("slug", { required: true })}
-            inputClassName="bg-white/90 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 w-full"
+            className="bg-white/90 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-400 w-full"
             onInput={(e) =>
               setValue("slug", slugTransform(e.currentTarget.value), {
                 shouldValidate: true,
@@ -219,7 +231,7 @@ export default function PostForm({ post }) {
             label="Featured Image"
             type="file"
             {...register("image", { required: !post })}
-            inputClassName="bg-white/90 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 w-full cursor-pointer"
+            className="bg-white/90 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 w-full cursor-pointer"
             accept="image/*"
           />
 
